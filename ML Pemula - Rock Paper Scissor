@@ -1,0 +1,373 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Submission.ipynb",
+      "provenance": [],
+      "collapsed_sections": [],
+      "toc_visible": true,
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Alexandromeo/dicoding-submission/blob/master/ML%20Pemula%20-%20Rock%20Paper%20Scissor\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "b5OEk0n5S7IS",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "!wget --no-check-certificate \\\n",
+        "  https://dicodingacademy.blob.core.windows.net/picodiploma/ml_pemula_academy/rockpaperscissors.zip \\\n",
+        "  -O /tmp/rockpaperscissors.zip"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "DkDX8o1OTJSP",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "import os, zipfile\n",
+        "local_zip = '/tmp/rockpaperscissors.zip'\n",
+        "zip_r = zipfile.ZipFile(local_zip,'r')\n",
+        "zip_r.extractall('/tmp')\n",
+        "zip_r.close()\n",
+        "\n",
+        "dir_base = '/tmp/rockpaperscissors'\n",
+        "dir_train = os.path.join(dir_base, 'train')\n",
+        "dir_val = os.path.join(dir_base, 'val')"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "s8GM-FpCksi6",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "shutil.rmtree(dir_train)\n",
+        "shutil.rmtree(dir_val)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "R9i0NDOITmZ0",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "#delete rps-cv-images folder\n",
+        "import shutil\n",
+        "shutil.rmtree(dir_base+'/rps-cv-images')"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "vlEqq7QvT9y9",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "#create train dan validation directory\n",
+        "os.mkdir(dir_train)\n",
+        "os.mkdir(dir_val)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "dUlBsZ1nWZn1",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "#create rockpaperscissor in train and val directory\n",
+        "os.mkdir(dir_train+'/rock')\n",
+        "os.mkdir(dir_train+'/paper')\n",
+        "os.mkdir(dir_train+'/scissors')\n",
+        "\n",
+        "os.mkdir(dir_val+'/rock')\n",
+        "os.mkdir(dir_val+'/paper')\n",
+        "os.mkdir(dir_val+'/scissors')"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "-ocbRW97XTzT",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "#move some pic into train dir\n",
+        "rock_pic = os.listdir(dir_base+'/rock')\n",
+        "paper_pic = os.listdir(dir_base+'/paper')\n",
+        "scissor_pic = os.listdir(dir_base+'/scissors')\n",
+        "\n",
+        "total_rock = len(rock_pic)\n",
+        "total_paper = len(paper_pic)\n",
+        "total_scissor = len(scissor_pic)\n",
+        "\n",
+        "for i in range(0, round(total_rock*0.8)):\n",
+        "  try:\n",
+        "    shutil.move(dir_base+'/rock/'+rock_pic[i], dir_train+'/rock')\n",
+        "  except Exception:\n",
+        "    print('Error', Exception)\n",
+        "for i in range(0, round(total_paper*0.8)):\n",
+        "  try:\n",
+        "    shutil.move(dir_base+'/paper/'+paper_pic[i], dir_train+'/paper')\n",
+        "  except Exception:\n",
+        "    print('Error', Exception)\n",
+        "for i in range(0, round(total*0.8)):\n",
+        "  try:\n",
+        "    shutil.move(dir_base+'/scissors/'+scissor_pic[i], dir_train+'/scissors')\n",
+        "  except Exception:\n",
+        "    print('Error', Exception)\n"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "7A7qwBbYqGQo",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "#move some pic into val dir\n",
+        "for i in range(0, total_rock):\n",
+        "  try:\n",
+        "    shutil.move(dir_base+'/rock/'+rock_pic[i], dir_val+'/rock')\n",
+        "  except Exception:\n",
+        "    print('Error', Exception)\n",
+        "for i in range(0, total_paper):\n",
+        "  try:\n",
+        "    shutil.move(dir_base+'/paper/'+paper_pic[i], dir_val+'/paper')\n",
+        "  except Exception:\n",
+        "    print('Error', Exception)\n",
+        "for i in range(0, total_scissor):\n",
+        "  try:\n",
+        "    shutil.move(dir_base+'/scissors/'+scissor_pic[i], dir_val+'/scissors')\n",
+        "  except Exception:\n",
+        "    print('Error', Exception)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "umvZFLsAn6R8",
+        "colab_type": "code",
+        "outputId": "800d7acc-031b-4b49-8334-a13020713052",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 50
+        }
+      },
+      "source": [
+        "#show count img on val and train\n",
+        "print('Val rock : ', len(os.listdir(dir_val+'/rock')))\n",
+        "print('Train rock : ', len(os.listdir(dir_train+'/rock')))\n"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Val rock :  145\n",
+            "Train rock :  581\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "UWKv586CuqvR",
+        "colab_type": "code",
+        "outputId": "b1f25514-7724-4410-8d7c-beae448f93d2",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 50
+        }
+      },
+      "source": [
+        "#image augmentation\n",
+        "train_datagen = ImageDataGenerator(\n",
+        "                    rescale=1./255,\n",
+        "                    rotation_range=20,\n",
+        "                    horizontal_flip=True,\n",
+        "                    shear_range = 0.2,\n",
+        "                    fill_mode = 'nearest')\n",
+        " \n",
+        "test_datagen = ImageDataGenerator(\n",
+        "                    rescale=1./255,\n",
+        "                    rotation_range=20,\n",
+        "                    horizontal_flip=True,\n",
+        "                    shear_range = 0.2,\n",
+        "                    fill_mode = 'nearest')\n",
+        "\n",
+        "train_generator = train_datagen.flow_from_directory(\n",
+        "        dir_train, \n",
+        "        target_size=(200, 200),\n",
+        "        batch_size=20,\n",
+        "        class_mode='categorical')\n",
+        " \n",
+        "val_generator = test_datagen.flow_from_directory(\n",
+        "        dir_val,\n",
+        "        target_size=(150, 150),\n",
+        "        batch_size=4, \n",
+        "        class_mode='categorical')"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Found 1732 images belonging to 3 classes.\n",
+            "Found 456 images belonging to 3 classes.\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "1oQ7PPRfwRl8",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "#model\n",
+        "import tensorflow as tf\n",
+        "from tensorflow.keras.optimizers import RMSprop\n",
+        "from tensorflow.keras.preprocessing.image import ImageDataGenerator\n",
+        "from keras.models import Sequential\n",
+        "seq = tf.keras.models.Sequential([\n",
+        "    tf.keras.layers.Conv2D(32, (3,3), activation='relu', input_shape=(200, 200, 3)),\n",
+        "    tf.keras.layers.MaxPooling2D(2, 2),\n",
+        "    tf.keras.layers.Conv2D(64, (3,3), activation='relu'),\n",
+        "    tf.keras.layers.MaxPooling2D(2,2),\n",
+        "    tf.keras.layers.Conv2D(128, (3,3), activation='relu'),\n",
+        "    tf.keras.layers.MaxPooling2D(2,2),\n",
+        "    tf.keras.layers.Conv2D(128, (3,3), activation='relu'),\n",
+        "    tf.keras.layers.MaxPooling2D(2,2),\n",
+        "    tf.keras.layers.Flatten(),\n",
+        "    tf.keras.layers.Dense(512, activation='relu'),\n",
+        "    tf.keras.layers.Dense(1, activation='sigmoid')\n",
+        "])"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "6l1ibWuiw6l6",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "#compile\n",
+        "seq.compile(\n",
+        "    optimizer = RMSprop(learning_rate=0.001),\n",
+        "    loss = 'categorical_crossentropy',\n",
+        "    metrics=['accuracy']\n",
+        ")"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "pkWCRdw2xfBv",
+        "colab_type": "code",
+        "outputId": "78dc484f-a5e4-483b-8685-2e92b352b167",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 441
+        }
+      },
+      "source": [
+        "#fitting\n",
+        "seq.fit(\n",
+        "      train_generator,\n",
+        "      steps_per_epoch=20,\n",
+        "      epochs=30,\n",
+        "      validation_data=val_generator,\n",
+        "      validation_steps=2,  \n",
+        "      verbose=2)"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Epoch 1/30\n"
+          ],
+          "name": "stdout"
+        },
+        {
+          "output_type": "error",
+          "ename": "InvalidArgumentError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mInvalidArgumentError\u001b[0m                      Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-148-d1f5e0d6f8ca>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      6\u001b[0m       \u001b[0mvalidation_data\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mval_generator\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      7\u001b[0m       \u001b[0mvalidation_steps\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;36m2\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 8\u001b[0;31m       verbose=2)\n\u001b[0m",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/tensorflow/python/keras/engine/training.py\u001b[0m in \u001b[0;36m_method_wrapper\u001b[0;34m(self, *args, **kwargs)\u001b[0m\n\u001b[1;32m     64\u001b[0m   \u001b[0;32mdef\u001b[0m \u001b[0m_method_wrapper\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     65\u001b[0m     \u001b[0;32mif\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_in_multi_worker_mode\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m  \u001b[0;31m# pylint: disable=protected-access\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 66\u001b[0;31m       \u001b[0;32mreturn\u001b[0m \u001b[0mmethod\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     67\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     68\u001b[0m     \u001b[0;31m# Running inside `run_distribute_coordinator` already.\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/tensorflow/python/keras/engine/training.py\u001b[0m in \u001b[0;36mfit\u001b[0;34m(self, x, y, batch_size, epochs, verbose, callbacks, validation_split, validation_data, shuffle, class_weight, sample_weight, initial_epoch, steps_per_epoch, validation_steps, validation_batch_size, validation_freq, max_queue_size, workers, use_multiprocessing)\u001b[0m\n\u001b[1;32m    870\u001b[0m               \u001b[0mworkers\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mworkers\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    871\u001b[0m               \u001b[0muse_multiprocessing\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0muse_multiprocessing\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 872\u001b[0;31m               return_dict=True)\n\u001b[0m\u001b[1;32m    873\u001b[0m           \u001b[0mval_logs\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m{\u001b[0m\u001b[0;34m'val_'\u001b[0m \u001b[0;34m+\u001b[0m \u001b[0mname\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mval\u001b[0m \u001b[0;32mfor\u001b[0m \u001b[0mname\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mval\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mval_logs\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mitems\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m}\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    874\u001b[0m           \u001b[0mepoch_logs\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mupdate\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mval_logs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/tensorflow/python/keras/engine/training.py\u001b[0m in \u001b[0;36m_method_wrapper\u001b[0;34m(self, *args, **kwargs)\u001b[0m\n\u001b[1;32m     64\u001b[0m   \u001b[0;32mdef\u001b[0m \u001b[0m_method_wrapper\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     65\u001b[0m     \u001b[0;32mif\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_in_multi_worker_mode\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m  \u001b[0;31m# pylint: disable=protected-access\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 66\u001b[0;31m       \u001b[0;32mreturn\u001b[0m \u001b[0mmethod\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     67\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     68\u001b[0m     \u001b[0;31m# Running inside `run_distribute_coordinator` already.\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/tensorflow/python/keras/engine/training.py\u001b[0m in \u001b[0;36mevaluate\u001b[0;34m(self, x, y, batch_size, verbose, sample_weight, steps, callbacks, max_queue_size, workers, use_multiprocessing, return_dict)\u001b[0m\n\u001b[1;32m   1079\u001b[0m                 step_num=step):\n\u001b[1;32m   1080\u001b[0m               \u001b[0mcallbacks\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mon_test_batch_begin\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mstep\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 1081\u001b[0;31m               \u001b[0mtmp_logs\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtest_function\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0miterator\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   1082\u001b[0m               \u001b[0;31m# Catch OutOfRangeError for Datasets of unknown size.\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1083\u001b[0m               \u001b[0;31m# This blocks until the batch has finished executing.\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/tensorflow/python/eager/def_function.py\u001b[0m in \u001b[0;36m__call__\u001b[0;34m(self, *args, **kwds)\u001b[0m\n\u001b[1;32m    578\u001b[0m         \u001b[0mxla_context\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mExit\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    579\u001b[0m     \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 580\u001b[0;31m       \u001b[0mresult\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_call\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwds\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    581\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    582\u001b[0m     \u001b[0;32mif\u001b[0m \u001b[0mtracing_count\u001b[0m \u001b[0;34m==\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_get_tracing_count\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/tensorflow/python/eager/def_function.py\u001b[0m in \u001b[0;36m_call\u001b[0;34m(self, *args, **kwds)\u001b[0m\n\u001b[1;32m    648\u001b[0m               *args, **kwds)\n\u001b[1;32m    649\u001b[0m       \u001b[0;31m# If we did not create any variables the trace we have is good enough.\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 650\u001b[0;31m       \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_concrete_stateful_fn\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_filtered_call\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mcanon_args\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mcanon_kwds\u001b[0m\u001b[0;34m)\u001b[0m  \u001b[0;31m# pylint: disable=protected-access\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    651\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    652\u001b[0m     \u001b[0;32mdef\u001b[0m \u001b[0mfn_with_cond\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m*\u001b[0m\u001b[0minner_args\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0minner_kwds\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/tensorflow/python/eager/function.py\u001b[0m in \u001b[0;36m_filtered_call\u001b[0;34m(self, args, kwargs)\u001b[0m\n\u001b[1;32m   1663\u001b[0m          if isinstance(t, (ops.Tensor,\n\u001b[1;32m   1664\u001b[0m                            resource_variable_ops.BaseResourceVariable))),\n\u001b[0;32m-> 1665\u001b[0;31m         self.captured_inputs)\n\u001b[0m\u001b[1;32m   1666\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1667\u001b[0m   \u001b[0;32mdef\u001b[0m \u001b[0m_call_flat\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mcaptured_inputs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mcancellation_manager\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;32mNone\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/tensorflow/python/eager/function.py\u001b[0m in \u001b[0;36m_call_flat\u001b[0;34m(self, args, captured_inputs, cancellation_manager)\u001b[0m\n\u001b[1;32m   1744\u001b[0m       \u001b[0;31m# No tape is watching; skip to running the function.\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1745\u001b[0m       return self._build_call_outputs(self._inference_function.call(\n\u001b[0;32m-> 1746\u001b[0;31m           ctx, args, cancellation_manager=cancellation_manager))\n\u001b[0m\u001b[1;32m   1747\u001b[0m     forward_backward = self._select_forward_and_backward_functions(\n\u001b[1;32m   1748\u001b[0m         \u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/tensorflow/python/eager/function.py\u001b[0m in \u001b[0;36mcall\u001b[0;34m(self, ctx, args, cancellation_manager)\u001b[0m\n\u001b[1;32m    596\u001b[0m               \u001b[0minputs\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    597\u001b[0m               \u001b[0mattrs\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mattrs\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 598\u001b[0;31m               ctx=ctx)\n\u001b[0m\u001b[1;32m    599\u001b[0m         \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    600\u001b[0m           outputs = execute.execute_with_cancellation(\n",
+            "\u001b[0;32m/usr/local/lib/python3.6/dist-packages/tensorflow/python/eager/execute.py\u001b[0m in \u001b[0;36mquick_execute\u001b[0;34m(op_name, num_outputs, inputs, attrs, ctx, name)\u001b[0m\n\u001b[1;32m     58\u001b[0m     \u001b[0mctx\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mensure_initialized\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     59\u001b[0m     tensors = pywrap_tfe.TFE_Py_Execute(ctx._handle, device_name, op_name,\n\u001b[0;32m---> 60\u001b[0;31m                                         inputs, attrs, num_outputs)\n\u001b[0m\u001b[1;32m     61\u001b[0m   \u001b[0;32mexcept\u001b[0m \u001b[0mcore\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_NotOkStatusException\u001b[0m \u001b[0;32mas\u001b[0m \u001b[0me\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     62\u001b[0m     \u001b[0;32mif\u001b[0m \u001b[0mname\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;31mInvalidArgumentError\u001b[0m:  Input to reshape is a tensor with 25088 values, but the requested shape requires a multiple of 12800\n\t [[node sequential_3/flatten_3/Reshape (defined at <ipython-input-148-d1f5e0d6f8ca>:8) ]] [Op:__inference_test_function_4090]\n\nFunction call stack:\ntest_function\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
